@@ -1,0 +1,3 @@
+[submodule "Lyzah"]
+	path = Lyzah
+	url = git@github.com:Juksuu/Lyzah.git
