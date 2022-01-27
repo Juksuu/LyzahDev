@@ -6,6 +6,7 @@ fn main() {
 
     let asset_path = Path::new(env!("OUT_DIR")).join("res");
     let mut sprite = Sprite::new(asset_path.join("happy-tree.png").to_path_buf());
+    sprite.set_anchor(0.5, 0.5);
     sprite.set_scale(0.5, 0.5);
     sprite.set_position(100.0, -100.0);
     sprite.set_rotation(-PI / 4.0);
