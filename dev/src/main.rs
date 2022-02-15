@@ -1,11 +1,42 @@
 use legion::*;
-use lyzah::{Application, Sprite, Time};
+use lyzah::{
+    input::{Input, VirtualKeyCode},
+    Application, Sprite, Time,
+};
 use std::{f32::consts::PI, path::Path};
 
+struct Player();
+
 #[system(par_for_each)]
-fn update_positions(sprite: &mut Sprite, #[resource] time: &Time) {
+fn update_rotations(sprite: &mut Sprite, #[resource] time: &Time) {
     let amount = PI * time.delta_time.as_secs_f32();
-    sprite.set_rotation(sprite.rotation + amount)
+    sprite.set_rotation(sprite.rotation + amount);
+
+    // println!("{:?}, {:?}", time.elapsed, time.delta_time)
+}
+
+#[system(par_for_each)]
+fn move_player(
+    sprite: &mut Sprite,
+    _player: &Player,
+    #[resource] time: &Time,
+    #[resource] input: &Input,
+) {
+    let old_pos = sprite.position;
+    let move_amount = 200.0 * time.delta_time.as_secs_f32();
+    let mut pos_change = (old_pos.0, 0.0);
+
+    for key in &input.pressed_keys {
+        match key {
+            VirtualKeyCode::A => new_pos.0 -= move_amount,
+            VirtualKeyCode::S => new_pos.1 -= move_amount,
+            VirtualKeyCode::W => new_pos.1 += move_amount,
+            VirtualKeyCode::D => new_pos.0 += move_amount,
+            _ => (),
+        }
+    }
+
+    sprite.set_position(old_pos.x + pos_change.0, old_pos.y + pos_change.1);
 }
 
 fn main() {
@@ -16,9 +47,7 @@ fn main() {
     game.resources.load_images(images);
 
     let mut world = World::default();
-    let mut resources = Resources::default();
-
-    resources.insert(Time::default());
+    let resources = Resources::default();
 
     let mut sprite = Sprite::new(game.resources.get("happy-tree.png".to_string()));
     sprite.set_anchor(0.5, 0.5);
@@ -26,7 +55,7 @@ fn main() {
     sprite.set_position(100.0, -100.0);
     sprite.set_rotation(-PI / 4.0);
 
-    let _entity = world.push((sprite,));
+    let _entity = world.push((sprite, Player()));
 
     let mut sprite2 = Sprite::new(game.resources.get("happy-tree.png".to_string()));
     sprite2.set_position(-300.0, -0.0);
@@ -34,7 +63,8 @@ fn main() {
     let _entity2 = world.push((sprite2,));
 
     let mut schedule = Schedule::builder()
-        .add_system(update_positions_system())
+        .add_system(update_rotations_system())
+        .add_system(move_player_system())
         .build();
 
     game.run(world, resources, move |mut world, mut resources| {
