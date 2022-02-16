@@ -1,8 +1,7 @@
-use legion::World;
-use lyzah::{Resources, Sprite};
-use std::f32::consts::PI;
-
 use crate::player::Player;
+use legion::World;
+use lyzah::{Resources, Sprite, Texture};
+use std::f32::consts::PI;
 
 pub struct Game {
     pub is_running: bool,
@@ -28,13 +27,13 @@ impl Game {
 }
 
 fn create_game_entities(world: &mut World, resources: &mut Resources) {
-    let mut sprite = Sprite::new(resources.get("happy-tree.png".to_string()));
+    let mut sprite = Sprite::new(resources.get::<Texture>("happy-tree.png".to_string()));
     sprite.set_anchor(0.5, 0.5);
     sprite.set_scale(0.5, 0.5);
     sprite.set_position(100.0, -100.0);
     sprite.set_rotation(-PI / 4.0);
 
-    let mut sprite2 = Sprite::new(resources.get("happy-tree.png".to_string()));
+    let mut sprite2 = Sprite::new(resources.get::<Texture>("happy-tree.png".to_string()));
     sprite2.set_position(-300.0, -0.0);
 
     let _ = world.push((sprite, Player()));
