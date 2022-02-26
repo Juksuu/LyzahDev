@@ -8,6 +8,7 @@ mod player;
 fn main() {
     let mut app = Application::builder()
         .with_system(player::move_player_system())
+        .with_system(game::game_loop_system())
         .build();
 
     let asset_path = Path::new(env!("OUT_DIR")).join("res");

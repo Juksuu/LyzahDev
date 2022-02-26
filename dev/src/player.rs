@@ -1,3 +1,4 @@
+use crate::game::Game;
 use legion::*;
 use lyzah::{
     input::{Input, VirtualKeyCode},
@@ -12,7 +13,12 @@ pub fn move_player(
     _player: &Player,
     #[resource] time: &Time,
     #[resource] input: &Input,
+    #[resource] game: &Game,
 ) {
+    if !game.is_running {
+        return;
+    }
+
     if input.is_mouse_inside_window {
         sprite.set_position(input.mouse_pos.x, input.mouse_pos.y);
     } else {
