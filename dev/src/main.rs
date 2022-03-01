@@ -1,4 +1,4 @@
-use lyzah::{loader, Application};
+use lyzah::{ecs::schedule::SystemStage, loader, Application};
 
 mod game;
 mod player;
@@ -6,9 +6,12 @@ mod player;
 use game::Game;
 
 fn main() {
+    let game_stage = SystemStage::single(game::game_loop);
+    let stage = SystemStage::parallel().with_system(player::move_player);
+
     let mut app = Application::builder()
-        .with_system(player::move_player_system())
-        .with_system(game::game_loop_system())
+        .add_stage("game_loop", game_stage)
+        .add_stage("update", stage)
         .build();
 
     let images = vec![loader::ResourceData {
@@ -21,7 +24,7 @@ fn main() {
     let mut game = Game::new();
     game.start(&mut app.world, &mut app.loader);
 
-    app.resources.insert(game);
+    app.world.insert_resource(game);
 
     app.run();
 }
