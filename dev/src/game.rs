@@ -4,10 +4,9 @@ use lyzah::{
     input::{Input, VirtualKeyCode},
     loader::Loader,
     window::{Window, WindowMode},
-    Sprite, Texture,
+    Sprite,
 };
 use std::f32::consts::PI;
-
 #[system()]
 pub fn game_loop(
     #[resource] input: &Input,
@@ -49,13 +48,13 @@ impl Game {
     }
 
     fn create_game_entities(&mut self, world: &mut legion::World, loader: &mut Loader) {
-        let mut sprite = Sprite::new(loader.get::<Texture>("happy-tree.png".to_string()));
+        let mut sprite = Sprite::new(loader.get_texture_id("happy-tree"));
         sprite.set_anchor(0.5, 0.5);
         sprite.set_scale(0.5, 0.5);
         sprite.set_position(100.0, -100.0);
         sprite.set_rotation(-PI / 4.0);
 
-        let mut sprite2 = Sprite::new(loader.get::<Texture>("happy-tree.png".to_string()));
+        let mut sprite2 = Sprite::new(loader.get_texture_id("happy-tree"));
         sprite2.set_position(-300.0, -0.0);
 
         let _ = world.push((sprite, Player()));

@@ -1,9 +1,9 @@
-use game::Game;
-use lyzah::Application;
-use std::path::Path;
+use lyzah::{loader, Application};
 
 mod game;
 mod player;
+
+use game::Game;
 
 fn main() {
     let mut app = Application::builder()
@@ -11,8 +11,10 @@ fn main() {
         .with_system(game::game_loop_system())
         .build();
 
-    let asset_path = Path::new(env!("OUT_DIR")).join("res");
-    let images = vec![asset_path.join("happy-tree.png").to_path_buf()];
+    let images = vec![loader::ResourceData {
+        name: "happy-tree",
+        path: "dev/res/happy-tree.png",
+    }];
 
     app.loader.load_images(images);
 
