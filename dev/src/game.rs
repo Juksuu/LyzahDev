@@ -33,9 +33,9 @@ impl Game {
         Game { is_running: false }
     }
 
-    pub fn start(&mut self, world: &mut World, loader: &mut Loader) {
+    pub fn start(&mut self, world: &mut World) {
         self.is_running = true;
-        self.create_game_entities(world, loader);
+        self.create_game_entities(world);
     }
 
     pub fn pause(&mut self) {
@@ -46,14 +46,15 @@ impl Game {
         self.is_running = true;
     }
 
-    fn create_game_entities(&mut self, world: &mut World, loader: &mut Loader) {
-        let mut sprite = Sprite::new(loader.get_texture_id("happy-tree"));
+    fn create_game_entities(&mut self, world: &mut World) {
+        let loader = world.get_resource::<Loader>().unwrap();
+        let mut sprite = Sprite::new(loader.get_texture_id("kotbulla"));
         sprite.set_anchor(0.5, 0.5);
         sprite.set_scale(0.5, 0.5);
         sprite.set_position(100.0, -100.0);
         sprite.set_rotation(-PI / 4.0);
 
-        let mut sprite2 = Sprite::new(loader.get_texture_id("happy-tree"));
+        let mut sprite2 = Sprite::new(loader.get_texture_id("kotbulla"));
         sprite2.set_position(-300.0, -0.0);
 
         world.spawn().insert(sprite).insert(Player());
