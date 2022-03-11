@@ -16,7 +16,7 @@ use game::Game;
 
 fn add_sprites(mut commands: Commands, loader: Res<Loader>, input: Res<Input>) {
     if input.is_mouse_inside_window {
-        let mut sprite = Sprite::new(loader.get_texture_id("kotbulla"));
+        let mut sprite = Sprite::new(loader.get_resource_id("kotbulla"));
         sprite.set_anchor(0.5, 0.5);
         sprite.set_scale(0.5, 0.5);
         sprite.set_position(100.0, -100.0);
@@ -38,8 +38,8 @@ fn main() {
     let game_stage = SystemStage::single(game::game_loop);
     let stage = SystemStage::parallel()
         .with_system(player::move_player)
-        .with_system(rotate_sprites)
-        .with_system(add_sprites);
+        // .with_system(add_sprites)
+        .with_system(rotate_sprites);
 
     let mut app = Application::builder()
         .add_stage("game_loop", game_stage)
@@ -58,7 +58,12 @@ fn main() {
                 path: "dev/res/kotbulla.png",
             },
         ];
+        let fonts = vec![loader::ResourceData {
+            name: "jetbrains",
+            path: "dev/res/JetBrainsMono-Regular.ttf",
+        }];
 
+        loader.load_fonts(fonts);
         loader.load_images(images);
     }
 

@@ -7,7 +7,7 @@ use lyzah::{
     input::{Input, VirtualKeyCode},
     loader::Loader,
     window::{Window, WindowMode},
-    Sprite,
+    Sprite, Text,
 };
 use std::f32::consts::PI;
 
@@ -48,16 +48,21 @@ impl Game {
 
     fn create_game_entities(&mut self, world: &mut World) {
         let loader = world.get_resource::<Loader>().unwrap();
-        let mut sprite = Sprite::new(loader.get_texture_id("kotbulla"));
+        let mut sprite = Sprite::new(loader.get_resource_id("kotbulla"));
         sprite.set_anchor(0.5, 0.5);
         sprite.set_scale(0.5, 0.5);
         sprite.set_position(100.0, -100.0);
         sprite.set_rotation(-PI / 4.0);
 
-        let mut sprite2 = Sprite::new(loader.get_texture_id("kotbulla"));
+        let mut sprite2 = Sprite::new(loader.get_resource_id("kotbulla"));
         sprite2.set_position(-300.0, -0.0);
+
+        let mut text = Text::new(loader.get_resource_id("jetbrains"), "Hello");
+        text.position.x = 200.0;
+        text.position.y = 400.0;
 
         world.spawn().insert(sprite).insert(Player());
         world.spawn().insert(sprite2);
+        world.spawn().insert(text);
     }
 }
